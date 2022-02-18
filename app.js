@@ -71,26 +71,37 @@ async function advancedRoutes(arg) {
     return;
   }
 
+  appDataRouteNumber = 0;
   appDataAllRoutes = routeData.routes;
 
-  nextRoute();
+  setRoute();
 }
 
 async function nextRoute() {
-  setRoute();
+  if (appDataAllRoutes[appDataRouteNumber + 1] == undefined) {
+    document.getElementById("routeID").innerHTML = "no more route available";
+    alert("no more route available");
+    return;
+  }
 
   appDataRouteNumber = appDataRouteNumber + 1;
+  setRoute();
 }
 
 async function beforeRoute() {
-  appDataRouteNumber = appDataRouteNumber - 1;
+  if (appDataAllRoutes[appDataRouteNumber - 1] == undefined) {
+    document.getElementById("routeID").innerHTML = "no more route available";
+    alert("no more route available");
+    return;
+  }
 
+  appDataRouteNumber = appDataRouteNumber - 1;
   setRoute();
 }
 
 async function setRoute() {
   if (appDataAllRoutes[appDataRouteNumber] == undefined) {
-    alert("no more route available");
+    return;
   }
 
   updateText("routeNumber", appDataRouteNumber);
