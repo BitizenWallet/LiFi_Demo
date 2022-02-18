@@ -140,18 +140,42 @@ async function setRoute() {
 
   document.getElementById("gasCostUSD").innerHTML = appDataRoute.gasCostUSD;
 
-  if (appDataRoute.steps[0].type == "lifi") {
-    updateStep("step1action", appDataRoute.steps[0].includedSteps[0]);
-    updateStep("step2action", appDataRoute.steps[0].includedSteps[1]);
-    if (appDataRoute.steps[1] != undefined) {
-      updateStep("step3action", appDataRoute.steps[1]);
-    }
-  } else {
-    updateStep("step1action", appDataRoute.steps[0]);
-    if (appDataRoute.steps[1] != undefined) {
-      updateStep("step2action", appDataRoute.steps[1]);
-    }
+  updateCodePreview(appDataRoute);
+
+  appDataSteps = [];
+  updateStep("step1action", "-");
+  updateStep("step2action", "-");
+  updateStep("step3action", "-");
+  appDataSteps = appDataRoute.steps;
+
+  appDataSteps[0] = appDataRoute.steps[0];
+  updateStep("step1action", appDataSteps[0]);
+  if (appDataRoute.steps[1] != undefined) {
+    appDataSteps[1] = appDataRoute.steps[1];
+    updateStep("step2action", appDataSteps[1]);
   }
+
+  // if (appDataRoute.steps[0].includedSteps != undefined) {
+  //   let includedSteps = appDataRoute.steps[0].includedSteps;
+
+  //   appDataSteps[0] = includedSteps[0];
+  //   updateStep("step1action", appDataSteps[0]);
+
+  //   if (includedSteps[1] != undefined) {
+  //     appDataSteps[1] = includedSteps[1];
+  //     updateStep("step2action", appDataSteps[1]);
+  //   }
+
+  //   appDataSteps[2] = appDataRoute.steps[1];
+  //   updateStep("step3action", appDataSteps[2]);
+  // } else {
+  //   appDataSteps[0] = appDataRoute.steps[0];
+  //   updateStep("step1action", appDataSteps[0]);
+  //   if (appDataRoute.steps[1] != undefined) {
+  //     appDataSteps[1] = appDataRoute.steps[1];
+  //     updateStep("step2action", appDataSteps[1]);
+  //   }
+  // }
 }
 
 async function setApproved() {
@@ -199,11 +223,11 @@ async function getApproved() {
 }
 
 async function setRunStep(num) {
-  if (appDataRoute.steps[num] == undefined) {
+  if (appDataSteps[num] == undefined) {
     return;
   }
 
-  let step = appDataRoute.steps[num];
+  let step = appDataSteps[num];
   appDataStep = step;
 
   appDataApprovalAddress = step.estimate.approvalAddress;
