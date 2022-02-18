@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <title>Document</title>
+    <!-- Get some bootstrap default styles -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      pre {
+        outline: 1px solid #ccc;
+        padding: 5px;
+        margin: 5px;
+      }
+      .string {
+        color: green;
+      }
+      .number {
+        color: darkorange;
+      }
+      .boolean {
+        color: blue;
+      }
+      .null {
+        color: magenta;
+      }
+      .key {
+        color: red;
+      }
+
+      h2,
+      h3 {
+        padding-top: 1em;
+      }
+
+      h5 {
+        padding-top: 0.5em, 0;
+      }
+      pre {
+        margin: 1em, 0;
+      }
+      dl {
+        width: 100%;
+        overflow: hidden;
+        padding: 0;
+        margin: 1em, 0;
+        background-color: #f5f5f5;
+        border-radius: 6px;
+      }
+      dt {
+        float: left;
+        width: 25%;
+        padding: 6px 12px;
+        margin: 0;
+        font-size: small;
+        line-height: 34px;
+      }
+      dd {
+        line-height: 34px;
+        float: left;
+        width: 75%;
+        padding: 6px 12px;
+        margin: 0;
+        display: block;
+      }
+
+      dd button {
+        float: right;
+      }
+    </style>
+  </head>
+  <body class="container">
+    <!-- Construct a Bootstrap layout -->
+
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Li.Fi Demo</h1>
+
+        <div id="prepare">
+          <button class="btn btn-primary" id="btn-connect">
+            Connect wallet
+          </button>
+        </div>
+
+        <div id="connected" style="display: none">
+          <button class="btn" id="btn-disconnect">Disconnect wallet</button>
+
+          <hr />
+
+          <div id="network">
+            <p>
+              <strong>Connected blockchain:</strong>
+              <span id="network-name"></span>
+            </p>
+
+            <p style="display: none">
+              <strong>Selected account:</strong>
+              <span id="selected-account"></span>
+            </p>
+          </div>
+
+          <hr />
+
+          <table class="table table-listing">
+            <thead>
+              <th>Address</th>
+              <th>balance</th>
+            </thead>
+
+            <tbody id="accounts"></tbody>
+          </table>
+        </div>
+
+        <br />
+      </div>
+    </div>
+
+    <!-- We use simple <template> templating for the example -->
+    <div id="templates" style="display: none">
+      <template id="template-balance">
+        <tr>
+          <th class="address"></th>
+          <td class="balance"></td>
+        </tr>
+      </template>
+    </div>
+
+    <hr />
+
+    <div class="row">
+      <div class="col-md-12">
+        <button class="clickable btn" data-function="setApproved">
+          setApproved
+        </button>
+
+        <button class="clickable btn" data-function="getApproved">
+          getApproved
+        </button>
+
+        <button class="clickable btn" data-function="getBalance" data-arg="1">
+          getBalance
+        </button>
+
+        <button
+          class="clickable btn"
+          data-function="getBalance"
+          data-arg="erc20"
+        >
+          (PoS) Tether USD
+        </button>
+
+        <span class="pull-right" id="toolbar-text"></span>
+      </div>
+    </div>
+    <hr />
+
+    <h3>getRoutes</h3>
+
+    <p>
+      <button class="clickable btn" data-function="advancedRoutes" data-arg="1">
+        137 to 137, getRoutes
+      </button>
+      <button class="clickable btn" data-function="advancedRoutes" data-arg="2">
+        250 to 137, getRoutes
+      </button>
+
+      <span class="pull-right">
+        <button class="clickable btn" data-function="beforeRoute">
+          beforeRoute
+        </button>
+        <button class="clickable btn" data-function="nextRoute">
+          nextRoute
+        </button>
+      </span>
+    </p>
+    <div>
+      <h5>Route <span id="routeNumber"></span></h5>
+
+      <dl>
+        <dt>RouteID</dt>
+        <dd id="routeID">-</dd>
+        <dt>fromToken</dt>
+        <dd id="fromToken">-</dd>
+        <dt>fromToken - address</dt>
+        <dd id="fromTokenAddress">-</dd>
+        <dt>toToken</dt>
+        <dd id="toToken">-</dd>
+        <dt>toToken - address</dt>
+        <dd id="toTokenAddress">-</dd>
+      </dl>
+      <dl>
+        <dt>fromAmount</dt>
+        <dd id="fromAmount">-</dd>
+        <dt>toAmount</dt>
+        <dd id="toAmount">-</dd>
+        <dt>gasCostUSD</dt>
+        <dd id="gasCostUSD">-</dd>
+      </dl>
+
+      <h5>Route Steps</h5>
+      <dl>
+        <dt>Step 1</dt>
+        <dd>
+          <span id="step1action">-</span>
+          <button
+            class="btn-sm btn clickable"
+            data-function="setRunStep"
+            data-arg="0"
+          >
+            Preivew Step 1
+          </button>
+        </dd>
+        <dt>Step 2</dt>
+        <dd>
+          <span id="step2action">-</span>
+          <button
+            class="btn-sm btn clickable"
+            data-function="setRunStep"
+            data-arg="1"
+          >
+            Preivew Step 2
+          </button>
+        </dd>
+      </dl>
+    </div>
+
+    <h3>Route Step</h3>
+    <dl>
+      <dt>Working Step</dt>
+      <dd id="workingStep">-</dd>
+      <dt>estimate / fromAmount</dt>
+      <dd id="estimateFromAmount">-</dd>
+      <dt>estimate / toAmount</dt>
+      <dd id="estimateToAmount">-</dd>
+      <dt>estimate / gasCosts / amount</dt>
+      <dd id="estimateGasCostsAmount">-</dd>
+    </dl>
+    <p>1. checkBalance</p>
+    <p>2. Approval</p>
+    <p>3. sendTransaction</p>
+    <div class="row">
+      <div class="col-md-12">
+        <button class="clickable btn" data-function="setApproved">
+          Approval
+        </button>
+
+        <button class="clickable btn" data-function="runStep">runStep</button>
+
+        <div class="pull-right">
+          <button
+            class="clickable btn"
+            data-function="getSwapContract"
+            data-arg="0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57"
+          >
+            getSwapContract
+          </button>
+          <button class="clickable btn" data-function="getBalance">
+            checkBalance
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <h3>Result JSON</h3>
+    <pre id="json-result">ResultText</pre>
+
+    <!-- script -->
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/web3@1.7.0/dist/web3.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/web3modal@1.9.0/dist/index.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/fortmatic@2.0.6/dist/fortmatic.js"
+    ></script>
+
+    <script type="text/javascript" src="./human_standard_token_abi.js"></script>
+    <script type="text/javascript" src="./constant.js"></script>
+    <script type="text/javascript" src="./index.js"></script>
+    <script type="text/javascript" src="./app.js"></script>
+  </body>
+</html>
