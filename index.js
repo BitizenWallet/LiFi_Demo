@@ -211,6 +211,8 @@ window.addEventListener("load", async () => {
 });
 
 async function updateStep(id, step) {
+  console.log(step);
+
   if (step !== undefined) {
     let value =
       step.type +

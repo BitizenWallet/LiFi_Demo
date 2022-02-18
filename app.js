@@ -166,14 +166,9 @@ async function setRoute() {
   //     updateStep("step2action", appDataSteps[1]);
   //   }
 
-  //   appDataSteps[2] = appDataRoute.steps[1];
-  //   updateStep("step3action", appDataSteps[2]);
-  // } else {
-  //   appDataSteps[0] = appDataRoute.steps[0];
-  //   updateStep("step1action", appDataSteps[0]);
   //   if (appDataRoute.steps[1] != undefined) {
   //     appDataSteps[1] = appDataRoute.steps[1];
-  //     updateStep("step2action", appDataSteps[1]);
+  //     updateStep("step3action", appDataSteps[1]);
   //   }
   // }
 }
