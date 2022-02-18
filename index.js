@@ -213,7 +213,9 @@ window.addEventListener("load", async () => {
 async function updateStep(id, step) {
   console.log(step);
 
-  if (step !== undefined) {
+  if (typeof step === "string") {
+    updateText(id, step);
+  } else {
     let value =
       step.type +
       ": " +
