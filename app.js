@@ -17,6 +17,7 @@ async function advancedRoutes(arg) {
   }
 
   document.getElementById("json-result").innerHTML = "loading...";
+  document.getElementById("routeID").innerHTML = "loading...";
 
   var postData;
 
@@ -139,10 +140,17 @@ async function setRoute() {
 
   document.getElementById("gasCostUSD").innerHTML = appDataRoute.gasCostUSD;
 
-  updateStep("step1action", appDataRoute.steps[0]);
-
-  if (appDataRoute.steps[1] != undefined) {
-    updateStep("step2action", appDataRoute.steps[1]);
+  if (appDataRoute.steps[0].type == "lifi") {
+    updateStep("step1action", appDataRoute.steps[0].includedSteps[0]);
+    updateStep("step2action", appDataRoute.steps[0].includedSteps[1]);
+    if (appDataRoute.steps[1] != undefined) {
+      updateStep("step3action", appDataRoute.steps[1]);
+    }
+  } else {
+    updateStep("step1action", appDataRoute.steps[0]);
+    if (appDataRoute.steps[1] != undefined) {
+      updateStep("step2action", appDataRoute.steps[1]);
+    }
   }
 }
 
@@ -153,16 +161,22 @@ async function setApproved() {
 
   if ((await getApproved()) == 0) {
     console.log("approve, 0");
-    myContract.methods.approve(usdt_137, toWei).send({ from: selectedAccount });
+    myContract.methods
+      .approve(appDataApprovalAddress, toWei)
+      .send({ from: selectedAccount });
   }
 }
 
 async function getContract() {
   let web3 = await getWeb3();
 
-  let myContract = new web3.eth.Contract(human_standard_token_abi, usdt_137, {
-    from: selectedAccount,
-  });
+  let myContract = new web3.eth.Contract(
+    human_standard_token_abi,
+    appDataApprovalAddress,
+    {
+      from: selectedAccount,
+    }
+  );
 
   return myContract;
 }
@@ -171,7 +185,7 @@ async function getApproved() {
   try {
     let myContract = await getContract();
     let o = await myContract.methods
-      .allowance(selectedAccount, usdt_137)
+      .allowance(selectedAccount, appDataApprovalAddress)
       .call();
 
     updateToolbarText("getApproved: " + o);
@@ -192,14 +206,15 @@ async function setRunStep(num) {
   let step = appDataRoute.steps[num];
   appDataStep = step;
 
-  // <dt>estimate / fromAmount</dt>
-  // <dd id="estimateFromAmount">-</dd>
-  // <dt>estimate / toAmount</dt>
-  // <dd id="estimateToAmount">-</dd>
-  // <dt>estimate / gasCosts / amount</dt>
-  // <dd id="estimateGasCostsAmount">-</dd>
+  appDataApprovalAddress = step.estimate.approvalAddress;
+  updateText("approvalAddress", appDataApprovalAddress);
 
-  updateText("workingStep", Number(num) + 1);
+  updateText(
+    "workingStepSymbol",
+    step.action.fromToken.symbol + " -> " + step.action.toToken.symbol
+  );
+
+  updateText("workingStep", Number(num) + 1 + ", " + step.id);
 
   updateText("estimateFromAmount", appDataStep.estimate.fromAmount);
   updateText(

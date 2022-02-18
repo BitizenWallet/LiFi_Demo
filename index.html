@@ -228,6 +228,17 @@
             Preivew Step 2
           </button>
         </dd>
+        <dt>Step 3</dt>
+        <dd>
+          <span id="step3action">-</span>
+          <button
+            class="btn-sm btn clickable"
+            data-function="setRunStep"
+            data-arg="2"
+          >
+            Preivew Step 3
+          </button>
+        </dd>
       </dl>
     </div>
 
@@ -235,6 +246,17 @@
     <dl>
       <dt>Working Step</dt>
       <dd id="workingStep">-</dd>
+      <dt>Approval Address</dt>
+      <dd>
+        <span id="approvalAddress">- </span>
+        <span class="pull-right">
+          <button class="clickable btn" data-function="setApproved">
+            Approval
+          </button>
+        </span>
+      </dd>
+      <dt>symbol</dt>
+      <dd id="workingStepSymbol">-</dd>
       <dt>estimate / fromAmount</dt>
       <dd id="estimateFromAmount">-</dd>
       <dt>estimate / toAmount</dt>
@@ -247,10 +269,6 @@
     <p>3. sendTransaction</p>
     <div class="row">
       <div class="col-md-12">
-        <button class="clickable btn" data-function="setApproved">
-          Approval
-        </button>
-
         <button class="clickable btn" data-function="runStep">runStep</button>
 
         <div class="pull-right">
