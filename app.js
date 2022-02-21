@@ -201,6 +201,8 @@ async function getContract() {
 }
 
 async function getApproved() {
+  console.log("getApproved -> ", appDataApprovalAddress);
+
   try {
     let myContract = await getContract();
     let o = await myContract.methods
@@ -211,8 +213,7 @@ async function getApproved() {
 
     return o;
   } catch (error) {
-    console.log("no contract?");
-    console.error(error);
+    console.log("error chain or no contract?");
     return -1;
   }
 }
@@ -263,6 +264,10 @@ async function runStep() {
     tokenBalance = await getBalance();
   } else {
     tokenBalance = await getBalance("erc20");
+  }
+
+  if (tokenBalance == -1) {
+    return;
   }
 
   console.log("tokenBalance", tokenBalance, appDataStep.action.fromAmount);
@@ -361,6 +366,7 @@ async function getBalance(isERC20) {
       return erc20Balance;
     } catch (error) {
       alert(error);
+      reutrn - 1;
     }
   }
 }
