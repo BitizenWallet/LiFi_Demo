@@ -21,34 +21,57 @@ async function advancedRoutes(arg) {
 
   var postData;
 
-  if (arg == "1") {
-    postData = {
-      options: {
-        integrator: "BitizenCrossSWAP",
-        slippage: 0.03,
-      },
-      fromChainId: 137,
-      fromAmount: "1110647",
-      fromTokenAddress: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
-      toChainId: 137,
-      toTokenAddress: "0x0000000000000000000000000000000000000000",
-      fromAddress: selectedAccount,
-      toAddress: selectedAccount,
-    };
-  } else {
-    postData = {
-      options: {
-        integrator: "BitizenCrossSWAP",
-        slippage: 0.03,
-      },
-      fromChainId: 137,
-      fromAmount: "278749164698139740",
-      fromTokenAddress: "0x0000000000000000000000000000000000000000",
-      toChainId: 250,
-      toTokenAddress: "0x0000000000000000000000000000000000000000",
-      fromAddress: selectedAccount,
-      toAddress: selectedAccount,
-    };
+  switch (arg) {
+    case "1":
+      postData = {
+        options: {
+          integrator: "BitizenCrossSWAP",
+          slippage: 0.03,
+        },
+        fromChainId: 137,
+        fromAmount: "100000000",
+        fromTokenAddress: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+        toChainId: 137,
+        toTokenAddress: "0x0000000000000000000000000000000000000000",
+        fromAddress: selectedAccount,
+        toAddress: selectedAccount,
+      };
+      break;
+    case "2":
+      postData = {
+        options: {
+          integrator: "BitizenCrossSWAP",
+          slippage: 0.03,
+        },
+        fromChainId: 137,
+        fromAmount: "278749164698139740",
+        fromTokenAddress: "0x0000000000000000000000000000000000000000",
+        toChainId: 250,
+        toTokenAddress: "0x0000000000000000000000000000000000000000",
+        fromAddress: selectedAccount,
+        toAddress: selectedAccount,
+      };
+      break;
+    case "3":
+      postData = {
+        fromChainId: 137,
+        fromAmount: "100000000",
+        fromTokenAddress: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+        toChainId: 56,
+        toTokenAddress: "0x55d398326f99059ff775485246999027b3197955",
+        fromAddress: selectedAccount,
+        toAddress: selectedAccount,
+        options: {
+          integrator: "BitizenCrossSWAP",
+          slippage: 0.03,
+        },
+      };
+      break;
+
+    default:
+      alert("no know");
+      return;
+      break;
   }
 
   updateCodePreview(postData);
@@ -451,4 +474,9 @@ async function paraswap(estimateData) {
     alert(error);
     return;
   }
+}
+
+async function connext() {
+  // STEP 8: Decrypt CallData
+  // STEP 9: Wait for Claim
 }
