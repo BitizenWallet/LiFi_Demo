@@ -44,7 +44,7 @@ async function advancedRoutes(arg) {
           slippage: 0.03,
         },
         fromChainId: 137,
-        fromAmount: "278749164698139740",
+        fromAmount: "2787491646981397400",
         fromTokenAddress: "0x0000000000000000000000000000000000000000",
         toChainId: 250,
         toTokenAddress: "0x0000000000000000000000000000000000000000",
