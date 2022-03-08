@@ -19,6 +19,10 @@ async function advancedRoutes(arg) {
   document.getElementById("json-result").innerHTML = "loading...";
   document.getElementById("routeID").innerHTML = "loading...";
 
+  var input_fromAmount = document.getElementById("input_fromAmount").value;
+
+  console.log("input_fromAmount", input_fromAmount);
+
   var postData;
 
   switch (arg) {
@@ -29,7 +33,7 @@ async function advancedRoutes(arg) {
           slippage: 0.03,
         },
         fromChainId: 137,
-        fromAmount: "100000000",
+        fromAmount: input_fromAmount,
         fromTokenAddress: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
         toChainId: 137,
         toTokenAddress: "0x0000000000000000000000000000000000000000",
@@ -44,7 +48,7 @@ async function advancedRoutes(arg) {
           slippage: 0.03,
         },
         fromChainId: 137,
-        fromAmount: "2787491646981397400",
+        fromAmount: input_fromAmount,
         fromTokenAddress: "0x0000000000000000000000000000000000000000",
         toChainId: 250,
         toTokenAddress: "0x0000000000000000000000000000000000000000",
@@ -377,6 +381,7 @@ async function getBalance(isERC20) {
 
   if (isERC20 != "erc20") {
     let balance = await web3.eth.getBalance(selectedAccount);
+    document.getElementById("input_fromAmount").value = balance;
     updateToolbarText("balance: " + balance);
     return balance;
   } else {
@@ -385,6 +390,7 @@ async function getBalance(isERC20) {
       let erc20Balance = await contract.methods
         .balanceOf(selectedAccount)
         .call();
+      document.getElementById("input_fromAmount").value = erc20Balance;
       updateToolbarText("erc20 balance: " + erc20Balance);
       return erc20Balance;
     } catch (error) {
