@@ -442,7 +442,9 @@ async function paraswap(estimateData) {
     destAmount: appDataStep.estimate.toAmountMin, //使用最小值更容易完成交易
     priceRoute: estimateData,
     userAddress: selectedAccount,
-    partner: "paraswap.io",
+    partner: "BitizenSWAP",
+    partnerAddress: "0x932eC04e3806b6BaC0E47Ba947b55bc023105Bec",
+    partnerFeeBps: 200,
     srcDecimals: 6,
     destDecimals: 18,
   };
