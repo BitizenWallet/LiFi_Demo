@@ -287,6 +287,9 @@ async function runStep() {
 
   console.log("runStep", appDataStep);
 
+  executeStep(appDataStep);
+  return;
+
   if (appDataStep.action.fromToken.address == AddressZero) {
     tokenBalance = await getBalance();
   } else {
@@ -395,7 +398,7 @@ async function getBalance(isERC20) {
       return erc20Balance;
     } catch (error) {
       alert(error);
-      reutrn - 1;
+      return -1;
     }
   }
 }
